@@ -1,0 +1,26 @@
+:root{
+  --bg:#0f1724;
+  --card:#0b1220;
+  --muted:#9aa4b2;
+  --accent1:#7c3aed; /* violet */
+  --accent2:#06b6d4; /* cyan */
+  --glass: rgba(255,255,255,0.04);
+  --success:#10b981;
+  --danger:#ef4444;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+}
+
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(180deg,#071226 0%, #071028 40%, #071226 100%);
+  color:#e6eef6;
+}
