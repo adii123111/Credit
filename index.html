@@ -1,314 +1,48 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Credit Score Prediction System</title>
-  <meta name="description" content="Professional Credit Score Prediction UI (HTML/CSS/JS)" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0f1724; /* deep navy */
-      --card:#0b1220;
-      --muted:#9aa4b2;
-      --accent1:#7c3aed; /* violet */
-      --accent2:#06b6d4; /* cyan */
-      --glass: rgba(255,255,255,0.04);
-      --success:#10b981;
-      --danger:#ef4444;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef6;background:linear-gradient(180deg,#071226 0%, #071028 40%, #071226 100%);}
-    .wrap{max-width:1100px;margin:36px auto;padding:28px}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-box">
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Login to your account</p>
 
-    header.top{
-      display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;
-    }
-    .brand{display:flex;gap:14px;align-items:center}
-    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:18px;box-shadow:0 6px 20px rgba(12,18,30,0.6)}
-    .brand h1{margin:0;font-size:18px;letter-spacing:0.2px}
-    .brand p{margin:0;color:var(--muted);font-size:13px}
-
-    .grid{display:grid;grid-template-columns:1fr 420px;gap:22px}
-    @media (max-width:980px){.grid{grid-template-columns:1fr;}}
-
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:20px;box-shadow:0 8px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
-
-    /* Left column form */
-    form .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-    form .section-title h2{margin:0;font-size:16px}
-    .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:520px){.fields{grid-template-columns:1fr}}
-    .field{display:flex;flex-direction:column}
-    label{font-size:13px;color:var(--muted);margin-bottom:6px}
-    input[type="text"], input[type="number"], select{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#eaf2ff;outline:none}
-    input::placeholder{color:rgba(230,238,246,0.35)}
-
-    .full{grid-column:1 / -1}
-    .actions{display:flex;gap:10px;align-items:center;margin-top:14px}
-    .btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
-    .btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white}
-    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
-
-    /* Right column results */
-    .result-hero{display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px}
-    .gauge{width:200px;height:200px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent2) 0% 0%, rgba(255,255,255,0.04) 0% 100%);box-shadow:inset 0 -8px 30px rgba(3,7,18,0.6);position:relative}
-    .gauge .score{position:absolute;font-size:28px;font-weight:700}
-    .range{font-size:13px;color:var(--muted)}
-
-    .detail-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
-    .detail{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border:1px solid rgba(255,255,255,0.02)}
-    .detail .label{color:var(--muted);font-size:13px}
-    .detail .val{font-weight:600}
-
-    /* progress bar */
-    .progress{height:12px;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden}
-    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent1),var(--accent2));border-radius:8px;width:0%}
-
-    footer.notes{margin-top:16px;color:var(--muted);font-size:13px}
-
-    /* small touches */
-    .hint{font-size:12px;color:var(--muted)}
-
-    /* subtle animation */
-    .gauge-anim{transition:all 700ms cubic-bezier(.2,.9,.3,1)}
-
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header class="top">
-      <div class="brand">
-        <div class="logo">CS</div>
-        <div>
-          <h1>Credit Score Prediction</h1>
-          <p></p>
-        </div>
-      </div>
-    </header>
-
-    <main class="grid">
-      <!-- Left: Form -->
-      <section class="card">
-        <div class="section-title"><h2>Enter Applicant Details</h2><div class="hint">All fields are required</div></div>
-        <form id="predict-form" onsubmit="return false;">
-          <div class="fields">
-            <div class="field">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" placeholder="e.g., A. Sharma" />
-            </div>
-
-            <div class="field">
-              <label for="age">Age</label>
-              <input type="number" id="age" min="18" max="100" value="30" />
-            </div>
-
-            <div class="field">
-              <label for="income">Annual Income (₹)</label>
-              <input type="number" id="income" min="0" value="600000" />
-            </div>
-
-            <div class="field">
-              <label for="employment">Years at Current Job</label>
-              <input type="number" id="employment" min="0" max="50" value="3" />
-            </div>
-
-            <div class="field">
-              <label for="util">Credit Utilization (%)</label>
-              <input type="number" id="util" min="0" max="100" value="30" />
-            </div>
-
-            <div class="field">
-              <label for="loans">Existing Loans Count</label>
-              <input type="number" id="loans" min="0" value="1" />
-            </div>
-
-            <div class="field full">
-              <label for="delinq">Number of Delinquencies / Late Payments (past 2 yrs)</label>
-              <input type="number" id="delinq" min="0" value="0" />
-            </div>
-
-            <div class="field">
-              <label for="dependents">Dependents</label>
-              <select id="dependents">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3+</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="purpose">Loan Purpose</label>
-              <select id="purpose">
-                <option value="personal">Personal</option>
-                <option value="home">Home</option>
-                <option value="education">Education</option>
-                <option value="business">Business</option>
-              </select>
-            </div>
-
+        <form id="loginForm">
+          <div class="input-group">
+            <label>Username</label>
+            <input id="email" placeholder="Enter your Username " />
           </div>
 
-          <div class="actions">
-            <button class="btn btn-primary" id="predict-btn">Predict Score</button>
-            <button class="btn btn-ghost" id="reset-btn" type="button">Reset</button>
-            <div style="flex:1"></div>
-            <div class="hint">Tip: Use realistic values for best results</div>
+          <div class="input-group">
+            <label>Password</label>
+            <div class="password-wrapper">
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+              />
+              <span id="togglePassword">🔒 </span>
+            </div>
           </div>
+
+          <button type="submit" class="login-btn" id="login-btn">Login</button>
+
+          <button type="button" class="register-btn" id="register-btn">
+            Register
+          </button>
+
+          <p id="message"></p>
         </form>
+      </div>
+    </div>
 
-      </section>
-
-      <!-- Right: Result -->
-      <aside class="card">
-        <div class="result-hero">
-          <div style="text-align:center;">
-            <div style="font-size:13px;color:var(--muted)">Predicted Credit Score</div>
-            <div class="gauge" id="gauge">
-              <div class="score" id="score">—</div>
-            </div>
-            <div class="range" id="risk">—</div>
-          </div>
-
-          <div style="width:100%">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div style="font-size:13px;color:var(--muted)">Confidence</div>
-              <div style="font-weight:700" id="conf">—</div>
-            </div>
-            <div class="progress" style="margin-top:8px"><i id="progressBar"></i></div>
-          </div>
-
-          <div class="detail-list" id="details">
-            <div class="detail"><div class="label">Risk Category</div><div class="val" id="category">—</div></div>
-            <div class="detail"><div class="label">Recommended Action</div><div class="val" id="action">—</div></div>
-            <div class="detail"><div class="label">Estimated Interest Tier</div><div class="val" id="tier">—</div></div>
-          </div>
-        </div>
-      </aside>
-    </main>
-  </div>
-
-  <script>
-    // Simple weighted rule-based estimator (demo only)
-    function clamp(v, a, b){return Math.max(a, Math.min(b, v))}
-
-    function computeScore(vals){
-      // vals: {age,income,employment,util,loans,delinq,dependents,purpose}
-      // base range 300-850
-      let score = 600; // neutral
-
-      // income effect (log scale)
-      const incomeFactor = Math.log10(Math.max(1, vals.income))/6; // ~0-1
-      score += (incomeFactor - 0.5) * 160; // +/-80
-
-      // employment stability
-      score += clamp((vals.employment - 2) * 6, -40, 80);
-
-      // utilization: lower is better
-      score -= clamp((vals.util - 30) * 2.2, -60, 120);
-
-      // loans: more loans => small penalty
-      score -= clamp((vals.loans - 1) * 10, -20, 60);
-
-      // delinquencies: heavy penalty
-      score -= vals.delinq * 50;
-
-      // dependents: minor effect
-      score -= vals.dependents * 4;
-
-      // purpose: some purposes slightly affect
-      if(vals.purpose === 'business') score -= 6;
-      if(vals.purpose === 'education') score += 6;
-
-      // age: very young or very old slight penalty
-      if(vals.age < 22) score -= 10; else if(vals.age > 65) score -= 8;
-
-      score = Math.round(clamp(score, 300, 850));
-
-      // confidence estimate based on available info
-      let confidence = 60 + Math.round(clamp((incomeFactor*100 - vals.delinq*10), 0, 40));
-
-      return {score, confidence};
-    }
-
-    function categorize(score){
-      if(score >= 750) return {cat:'Excellent', action:'Eligible for best rates', tier:'A (Lowest)'};
-      if(score >= 700) return {cat:'Good', action:'Likely approved with good rates', tier:'B'};
-      if(score >= 650) return {cat:'Fair', action:'May need co-signer / higher rates', tier:'C'};
-      return {cat:'Poor', action:'Improve payments & reduce debt', tier:'D (High)'};
-    }
-
-    function updateUI(res){
-      const scoreEl = document.getElementById('score');
-      const riskEl = document.getElementById('risk');
-      const confEl = document.getElementById('conf');
-      const bar = document.getElementById('progressBar');
-      const cat = document.getElementById('category');
-      const action = document.getElementById('action');
-      const tier = document.getElementById('tier');
-      const gauge = document.getElementById('gauge');
-
-      scoreEl.textContent = res.score;
-      let pct = Math.round((res.score - 300) / 550 * 100);
-      pct = clamp(pct,0,100);
-
-      // set gauge using conic gradient inline style
-      gauge.style.background = `conic-gradient(${(pct<=50? 'var(--danger)' : (pct<75? 'orange' : 'var(--accent2)'))} 0% ${pct}%, rgba(255,255,255,0.03) ${pct}% 100%)`;
-      scoreEl.style.color = pct<50 ? 'var(--danger)' : (pct<75 ? '#ff8c00' : 'var(--accent2)');
-
-      const catObj = categorize(res.score);
-      riskEl.textContent = catObj.cat + ' • ' + (res.score<=500 ? 'High risk' : (res.score<=650 ? 'Moderate risk' : 'Low risk'));
-      confEl.textContent = res.confidence + '%';
-      bar.style.width = res.confidence + '%';
-      cat.textContent = catObj.cat;
-      action.textContent = catObj.action;
-      tier.textContent = catObj.tier;
-    }
-
-    document.getElementById('predict-btn').addEventListener('click', ()=>{
-      const vals = {
-        age: Number(document.getElementById('age').value) || 0,
-        income: Number(document.getElementById('income').value) || 0,
-        employment: Number(document.getElementById('employment').value) || 0,
-        util: Number(document.getElementById('util').value) || 0,
-        loans: Number(document.getElementById('loans').value) || 0,
-        delinq: Number(document.getElementById('delinq').value) || 0,
-        dependents: Number(document.getElementById('dependents').value) || 0,
-        purpose: document.getElementById('purpose').value || 'personal'
-      };
-
-      const res = computeScore(vals);
-      // small adjustment: map to UI colors by setting CSS variables on root
-      document.documentElement.style.setProperty('--accent2','#06b6d4');
-      updateUI(res);
-    });
-
-    document.getElementById('reset-btn').addEventListener('click', ()=>{
-      document.getElementById('predict-form').reset();
-      // reset defaults
-      document.getElementById('age').value = 30;
-      document.getElementById('income').value = 600000;
-      document.getElementById('employment').value = 3;
-      document.getElementById('util').value = 30;
-      document.getElementById('loans').value = 1;
-      document.getElementById('delinq').value = 0;
-      document.getElementById('dependents').value = 0;
-      document.getElementById('purpose').value = 'personal';
-
-      // clear UI
-      document.getElementById('score').textContent = '—';
-      document.getElementById('risk').textContent = '—';
-      document.getElementById('conf').textContent = '—';
-      document.getElementById('progressBar').style.width = '0%';
-      document.getElementById('category').textContent = '—';
-      document.getElementById('action').textContent = '—';
-      document.getElementById('tier').textContent = '—';
-      document.getElementById('gauge').style.background = 'conic-gradient(var(--accent2) 0% 0%, rgba(255,255,255,0.04) 0% 100%)';
-    });
-
-    // initialize
-    document.getElementById('reset-btn').click();
-  </script>
-</body>
+<script type="module" src="script.js"></script>
+  </body>
 </html>
